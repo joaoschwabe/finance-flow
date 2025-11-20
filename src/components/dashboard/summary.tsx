@@ -4,12 +4,12 @@ import { ArrowDownRight, ArrowUpRight, Wallet } from 'lucide-react';
 import { BalanceCard, BalanceCardSuspense } from './balance-card';
 
 export const DashboardSummary = () => {
-  const { data, isLoading } = useServerActionQuery(getSummaryDashboardStatsAction, {
+  const { data, isPending } = useServerActionQuery(getSummaryDashboardStatsAction, {
     input: undefined,
     queryKey: ['dashboard', 'summary-stats'],
   });
 
-  if (isLoading || !data) {
+  if (isPending || !data) {
     return (
       <div className="mb-8 grid grid-cols-1 gap-4 md:grid-cols-3">
         <BalanceCardSuspense />

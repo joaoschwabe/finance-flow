@@ -41,7 +41,7 @@ export const CategoryField = () => {
               if (icon) methods.setValue('icon', icon);
             }}>
             <SelectTrigger ref={selectTriggerRef} id="category">
-              <SelectValue placeholder="Selecione uma categoria" />
+              <SelectValue placeholder="Selecione" />
             </SelectTrigger>
             <SelectContent>
               {type === 'EXPENSE' ? (

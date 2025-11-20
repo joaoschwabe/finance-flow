@@ -9,6 +9,7 @@ import {
 } from '@/components/ui/chart';
 import { useServerActionQuery } from '@/lib/hooks/server-action-hooks';
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from 'recharts';
+import { Spinner } from './ui/spinner';
 
 const chartConfig = {
   balance: {
@@ -18,10 +19,12 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function BalanceChart() {
-  const { data } = useServerActionQuery(getChartDashboardDataAction, {
+  const { data, isLoading } = useServerActionQuery(getChartDashboardDataAction, {
     input: undefined,
     queryKey: ['dashboard', 'chart'],
   });
+
+  if (isLoading) return <Spinner />;
 
   return (
     <ChartContainer config={chartConfig} className="h-[170px] w-full">

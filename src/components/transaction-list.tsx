@@ -1,24 +1,46 @@
+'use client';
+
 import { getDashboardRecentTransactionsAction } from '@/actions/dashboard';
+import { deleteTransactionServerAction } from '@/actions/delete-transaction';
 import { Badge } from '@/components/ui/badge';
-import { useServerActionQuery } from '@/lib/hooks/server-action-hooks';
+import { useServerActionMutation, useServerActionQuery } from '@/lib/hooks/server-action-hooks';
+import { useQueryClient } from '@tanstack/react-query';
 import dayjs from 'dayjs';
+import { Trash } from 'lucide-react';
 import { DynamicIcon, type IconName } from 'lucide-react/dynamic';
+import { Dialog } from './ui/dialog-controller';
+import { Spinner } from './ui/spinner';
 
 export function TransactionList() {
-  const { data } = useServerActionQuery(getDashboardRecentTransactionsAction, {
+  const { data, isLoading } = useServerActionQuery(getDashboardRecentTransactionsAction, {
     input: undefined,
-    queryKey: ['getDashboardRecentTransactionsAction'],
+    queryKey: ['dashboard', 'list'],
   });
+  const queryClient = useQueryClient();
 
-  if (!data) return null;
+  const { mutateAsync: deleteTransaction } = useServerActionMutation(deleteTransactionServerAction);
+
+  if (isLoading) return <Spinner />;
 
   return (
-    <div className="space-y-1">
-      {data.map((transaction) => {
+    <div className="w-full space-y-1">
+      {data?.map((transaction) => {
         return (
           <div
+            onClick={() =>
+              Dialog.open({
+                description:
+                  'Você tem certeza que deseja excluir esta transação? Esta ação não pode desfeita.',
+                modal: true,
+                onConfirm: async () => {
+                  await deleteTransaction(transaction.id);
+                  await queryClient.invalidateQueries({ queryKey: ['dashboard'] });
+                },
+                title: 'Excluir transação.',
+              })
+            }
             key={transaction.id}
-            className="hover:bg-muted/50 group flex cursor-pointer items-center justify-between rounded-lg p-4 transition-colors">
+            className="hover:bg-destructive/10 group relative flex cursor-pointer items-center justify-between rounded-lg p-4 transition-colors">
             <div className="flex items-center gap-4">
               <div
                 className={`flex h-10 w-10 items-center justify-center rounded-lg ${
@@ -44,9 +66,10 @@ export function TransactionList() {
               </div>
             </div>
             <p
-              className={`text-lg font-semibold ${transaction.type === 'INCOME' ? 'text-accent' : 'text-foreground'}`}>
+              className={`text-right text-lg font-semibold ${transaction.type === 'INCOME' ? 'text-accent' : 'text-foreground'}`}>
               {transaction.type === 'INCOME' ? '+' : ''}R$ {Math.abs(transaction.amount).toFixed(2)}
             </p>
+            <Trash className="invisible absolute left-1/2 group-hover:visible" />
           </div>
         );
       })}

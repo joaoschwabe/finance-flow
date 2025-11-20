@@ -8,7 +8,7 @@ export const GlobalHeader = async () => {
 
   return (
     <header className="border-border/50 bg-background/80 sticky top-0 z-10 border-b backdrop-blur-sm">
-      <div className="container mx-auto flex items-center justify-between px-4 py-4">
+      <div className="container mx-auto flex flex-wrap items-center justify-between px-4 py-4">
         <div className="flex items-center gap-3">
           <div className="bg-primary flex h-10 w-10 items-center justify-center rounded-xl">
             <Wallet className="text-primary-foreground h-5 w-5" />
@@ -18,7 +18,7 @@ export const GlobalHeader = async () => {
             <p className="text-muted-foreground text-sm">Controle Inteligente</p>
           </div>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 max-sm:w-full max-sm:justify-between">
           <ThemeToggle />
 
           <AuthButton session={session} />

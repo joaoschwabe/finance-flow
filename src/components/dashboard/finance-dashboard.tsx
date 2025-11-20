@@ -75,8 +75,8 @@ export function FinanceDashboard() {
         </div>
 
         {/* Transactions */}
-        <Card className="border-border/50 bg-card/50 p-6 backdrop-blur-sm">
-          <div className="mb-6 flex items-center justify-between">
+        <Card className="border-border/50 bg-card/50 flex items-center p-6 backdrop-blur-sm">
+          <div className="mb-6 flex w-full items-center justify-between">
             <div>
               <h3 className="text-foreground text-lg font-semibold">Transações Recentes</h3>
               <p className="text-muted-foreground text-sm">Últimas movimentações</p>

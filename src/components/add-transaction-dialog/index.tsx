@@ -54,12 +54,10 @@ export function AddTransactionDialog({ open, onOpenChange, type }: AddTransactio
 
       await queryClient.invalidateQueries({
         exact: false,
-        queryKey: ['getDashboardRecentTransactionsAction'],
-      });
-      await queryClient.invalidateQueries({
-        exact: false,
         queryKey: ['dashboard'],
       });
+
+      methods.reset();
 
       onOpenChange(false);
     } catch {
@@ -68,7 +66,10 @@ export function AddTransactionDialog({ open, onOpenChange, type }: AddTransactio
   });
 
   useEffect(() => {
-    if (type) methods.setValue('type', type);
+    if (type) {
+      methods.reset();
+      methods.setValue('type', type);
+    }
   }, [methods, type]);
 
   return (
@@ -104,7 +105,7 @@ export function AddTransactionDialog({ open, onOpenChange, type }: AddTransactio
                 onClick={() => onOpenChange(false)}>
                 Cancelar
               </Button>
-              <Button type="submit" className="flex-1">
+              <Button onClick={onSubmit} className="flex-1">
                 Adicionar Transação
               </Button>
             </div>
